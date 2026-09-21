@@ -1,26 +1,34 @@
+import { fetchAuth } from "@/services/auth";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, Text } from "react-native";
 import PedidoCard from "../components/PedidoCard";
 
-const pedidos = [
-  { nroPedido: "#001", Cliente: "Farmacia Central", estado: "En camino", fecha: "02/09/2026"},
-  { nroPedido: "#002", Cliente: "Herboristeria Vida", estado: "Pendiente", fecha: "20/00/2026"},
-  { nroPedido: "#003", Cliente: "Distribuidora Norte", estado: "Entregado", fecha: "25/08/2026"},
-  { nroPedido: "#004", Cliente: "Farmacia San Martin", estado: "En camino", fecha: "03/09/2026"},
-  { nroPedido: "#005", Cliente: "Herboristeria Natural", estado: "Pendiente", fecha: "10/09/2026"},
-];
+
 
 export default function Pedidos() {
+
+  const [envios, setEnvios] = useState<any[]>([]);
+
+  useEffect(() => {
+    async function cargar() {
+      const res = await fetchAuth("/envios/mis-envios");
+      const data = await res.json();
+      setEnvios(data);
+    }
+    cargar();
+  }, []);
+
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.titulo}>Pedidos Asignados</Text>
-      {pedidos.map((p) => (
+      {envios.filter((envio) => !envio.resultado_entrega).map ((envio)=>(
         <PedidoCard
-          key={p.nroPedido}
-          nroPedido={p.nroPedido}
-          Cliente={p.Cliente}
-          estado={p.estado}
-          fecha={p.fecha}
-          />
+          key={envio.id_envio}
+          nroPedido={envio.nro_pedido}
+          Cliente={envio.contacto_receptor}
+          estado={envio.resultado_entrega ? "Entregado" : "Pendiente"}
+          fecha={envio.fecha_despacho}
+        />
       ))}
     </ScrollView>
   );

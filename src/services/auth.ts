@@ -1,4 +1,5 @@
 import { API_URL } from "@/constants/api";
+import * as SecureStore from "expo-secure-store";
 
 
 export async function login(email:string, password: string) {
@@ -24,3 +25,16 @@ export async function login(email:string, password: string) {
 
 }
 
+export async function fetchAuth(ruta:string, opciones: RequestInit = {}) {
+    const token = await SecureStore.getItemAsync("token");
+
+    const res = await fetch(`${API_URL}${ruta}`,{
+        ...opciones,
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+    })
+
+    return res;
+}
