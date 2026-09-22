@@ -1,6 +1,7 @@
 import { fetchAuth } from "@/services/auth";
+import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { Pressable, ScrollView, StyleSheet, Text } from "react-native";
 import PedidoCard from "../components/PedidoCard";
 
 
@@ -8,6 +9,7 @@ import PedidoCard from "../components/PedidoCard";
 export default function Pedidos() {
 
   const [envios, setEnvios] = useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     async function cargar() {
@@ -21,14 +23,17 @@ export default function Pedidos() {
   return (
     <ScrollView style={styles.container}>
       <Text style={styles.titulo}>Pedidos Asignados</Text>
-      {envios.filter((envio) => !envio.resultado_entrega).map ((envio)=>(
-        <PedidoCard
+      {envios.filter((envio) => !envio.resultado_entrega).map((envio) => (
+        <Pressable
           key={envio.id_envio}
-          nroPedido={envio.nro_pedido}
-          Cliente={envio.contacto_receptor}
-          estado={envio.resultado_entrega ? "Entregado" : "Pendiente"}
-          fecha={envio.fecha_despacho}
-        />
+          onPress={() => router.push({ pathname: "/confirmar", params: { id: envio.id_envio } })}>
+          <PedidoCard
+            nroPedido={envio.nro_pedido}
+            Cliente={envio.contacto_receptor}
+            estado={envio.resultado_entrega ? "Entregado" : "Pendiente"}
+            fecha={envio.fecha_despacho}
+          />
+        </Pressable>
       ))}
     </ScrollView>
   );
