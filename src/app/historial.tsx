@@ -1,39 +1,52 @@
 import PedidoCard from "@/components/PedidoCard";
 import { fetchAuth } from "@/services/auth";
-import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text } from "react-native";
+import { useQuery } from "@tanstack/react-query";
+import { useFocusEffect } from "expo-router";
+import { useCallback } from "react";
+import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
 
 
 
 export default function Historial() {
 
-  const [envios, setEnvios] = useState<any[]>([]);
-
-  useEffect(() => {
-    async function cargar() {
+  const { data: envios = [], isLoading, refetch } = useQuery<any[]>({
+    queryKey: ["mis-envios"],
+    queryFn: async () => {
       const res = await fetchAuth("/envios/mis-envios");
       const data = await res.json();
-      setEnvios(data);
+      if (!res.ok) throw new Error(data.error || "Error al conseguir envios");
+      return data;
+    },
+  });
 
-    }
-    cargar();
-
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      refetch();
+    }, [refetch])
+  );
 
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.titulo}>Historial de Pedidos</Text>
-      {envios.filter((envio) => envio.resultado_entrega).map((envio) => (
-        <PedidoCard
-          key={envio.id_envio}
-          nroPedido={envio.nro_pedido}
-          Cliente={envio.contacto_receptor}
-          estado={envio.resultado_entrega}
-          fecha={envio.fecha_entrega_real}
+      {isLoading ? (
+        <ActivityIndicator size="large" color="#2ecc71" />
+      ) : (
+        <FlatList
+          data={envios.filter((envio) => envio.resultado_entrega)}
+          keyExtractor={(envio) => String(envio.id_envio)}
+          renderItem={({ item: envio }) => (
+            <PedidoCard
+              nroPedido={envio.nro_pedido}
+              Cliente={envio.contacto_receptor}
+              estado={envio.resultado_entrega}
+              fecha={envio.fecha_entrega_real}
+            />
+          )}
         />
-      ))}
-    </ScrollView>
+      )}
+
+    </View>
 
   );
 }
