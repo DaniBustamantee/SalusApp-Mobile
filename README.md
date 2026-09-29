@@ -18,14 +18,15 @@ Brindar al repartidor una herramienta móvil que le permita consultar sus pedido
 
 ## Features del proyecto
 
-El grupo está compuesto por 3 integrantes, por lo que se definieron las 4 Features requeridas por la consigna.
+El grupo está compuesto por 3 integrantes, por lo que se definieron las 4 Features requeridas por la consigna. La app se conecta al backend real del proyecto de tesis.
 
 | # | Feature | Estado actual |
 |---|---|---|
-| 1 | Consultar pedidos asignados | Implementada con datos estáticos y componentes reutilizables |
-| 2 | Consultar el mapa y la ruta de entrega | En desarrollo - pantalla inicial creada |
-| 3 | Consultar el historial de entregas | En desarrollo - pantalla inicial creada |
-| 4 | Confirmar el resultado de una entrega | Pendiente |
+| 1 | Consultar pedidos asignados |Implementada — datos reales desde el backend, filtrados por pendientes |
+| 2 | Consultar el mapa y la ruta de entrega |  Pendiente |
+| 3 | Consultar el historial de entregas |Implementada - entregas ya confirmadas, con su resultado real (completo / parcial / fallido) |
+| 4 | Confirmar el resultado de una entrega |  Implementada — y refleja el cambio en pedidos e historial |
+
 
 ## Avance de la Unidad I
 
@@ -62,12 +63,18 @@ SalusApp-Mobile/
 │   ├── app/
 │   │   ├── _layout.tsx
 │   │   ├── index.tsx
+│   │   ├── login.tsx
 │   │   ├── pedidos.tsx
+│   │   ├── confirmar.tsx
 │   │   ├── mapa.tsx
 │   │   └── historial.tsx
-│   └── components/
-│       ├── MenuButton.tsx
-│       └── PedidoCard.tsx
+│   ├── components/
+│   │   ├── MenuButton.tsx
+│   │   └── PedidoCard.tsx
+│   ├── constants/
+│   │   └── api.ts
+│   └── services/
+│       └── auth.ts
 ├── app.json
 ├── package.json
 └── README.md
@@ -91,5 +98,5 @@ Con el emulador de Android encendido, presionar `a` en la terminal de Expo.
 
 ## Desarrollo incremental
 
-Esta entrega utiliza información estática. Las Features se completarán progresivamente a medida que se incorporen nuevos contenidos durante la cursada.
+Esta entrega conecta la app al backend real del sistema (login, pedidos, historial y confirmación de entregas). Queda pendiente la feature de mapa y ruta de entrega, que se incorporará en la próxima etapa.
 
