@@ -1,4 +1,9 @@
+import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
+
+
+
+
 
 type Props = {
     nroPedido: string;
@@ -7,10 +12,26 @@ type Props = {
     fecha: string;
 };
 
+function iconos(estado: string) {
+    if (estado === "completo") return { icono: "checkmark-circle", color: "#2ecc71" } as const;
+    if (estado === "parcial") return { icono: "alert-circle", color: "#f39c12" } as const;
+    if (estado === "fallido") return { icono: "close-circle", color: "#e74c3c" } as const
+    return { icono: "time", color: "#95a5a6" } as const;
+}
+
+
+
 export default function PedidoCard({ nroPedido, Cliente, estado, fecha }: Props) {
+
+    const { icono, color } = iconos(estado);
+
+
     return (
         <View style={styles.card}>
-            <Text style ={styles.numero}>Pedido {nroPedido}</Text>
+            <View style={styles.encabezado}>
+                <Text style={styles.numero}>Pedido {nroPedido}</Text>
+                <Ionicons name={icono} size={24} color={color} />
+            </View>
             <Text style={styles.dato}>Cliente: {Cliente}</Text>
             <Text style={styles.dato}>Estado: {estado}</Text>
             <Text style={styles.dato}>Fecha: {fecha}</Text>
@@ -30,4 +51,5 @@ const styles = StyleSheet.create({
     },
     numero: { fontSize: 16, fontWeight: "bold", marginBottom: 5 },
     dato: { fontSize: 14, color: "#555" },
+    encabezado: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" }
 });
