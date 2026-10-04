@@ -1,8 +1,12 @@
 import { login } from "@/services/auth";
+import { useSessionStore } from "@/store/useSessionStore";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { useState } from "react";
 import { Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput } from "react-native";
+
+
+
 
 export default function Login() {
 
@@ -10,6 +14,7 @@ export default function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const router = useRouter();
+    const setUsuario = useSessionStore((state) => state.setUsuario);
 
     async function handleLogin() {
 
@@ -18,6 +23,7 @@ export default function Login() {
             const data = await login(email, password);
             await SecureStore.setItemAsync("token", data.token)
             await SecureStore.setItemAsync("usuario", JSON.stringify(data.usuario));
+            setUsuario(data.usuario);
             router.replace("/")
         } catch (e) {
             setError(e instanceof Error ? e.message : "Error");

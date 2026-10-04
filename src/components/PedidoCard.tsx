@@ -27,7 +27,7 @@ export default function PedidoCard({ nroPedido, Cliente, estado, fecha }: Props)
 
 
     return (
-        <View style={styles.card}>
+        <View style={[styles.card,{borderLeftColor:color }]}>
             <View style={styles.encabezado}>
                 <Text style={styles.numero}>Pedido {nroPedido}</Text>
                 <Ionicons name={icono} size={24} color={color} />
@@ -46,7 +46,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 12,
         borderLeftWidth: 4,
-        borderLeftColor: "#2ecc71",
         elevation: 2,
     },
     numero: { fontSize: 16, fontWeight: "bold", marginBottom: 5 },
