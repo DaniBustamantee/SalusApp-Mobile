@@ -20,27 +20,34 @@ Brindar al repartidor una herramienta móvil que le permita consultar sus pedido
 
 El grupo está compuesto por 3 integrantes, por lo que se definieron las 4 Features requeridas por la consigna. La app se conecta al backend real del proyecto de tesis.
 
-| # | Feature | Estado actual |
-|---|---|---|
-| 1 | Consultar pedidos asignados |Implementada — datos reales desde el backend, filtrados por pendientes |
-| 2 | Consultar el mapa y la ruta de entrega |  Pendiente |
-| 3 | Consultar el historial de entregas |Implementada - entregas ya confirmadas, con su resultado real (completo / parcial / fallido) |
-| 4 | Confirmar el resultado de una entrega |  Implementada — y refleja el cambio en pedidos e historial |
+1. **Consultar pedidos asignados**: pestaña "Pendientes" de la pantalla "Mis envíos". Muestra los envíos pendientes del repartidor con datos reales del backend, con un icono y un color según el estado. Al tocar una tarjeta se abre la confirmación de la entrega.
+2. **Consultar el historial de entregas**: pestaña "Historial" de la misma pantalla. Muestra las entregas ya confirmadas con su resultado real (completo, parcial o fallido).
+3. **Confirmar el resultado de una entrega**: se elige el resultado, se agregan observaciones y se envía al backend. Al volver, las listas se actualizan solas.
+
+Además de las features de la consigna, se implementó:
+
+- **Login con autenticación real** contra el backend, con JWT guardado de forma segura (`expo-secure-store`).
+- **Sesión del usuario**: saludo con el nombre del repartidor y botón de cerrar sesión, que borra el token, vacía el estado global y el caché de consultas.
+- **Navegación por pestañas** en "Mis envíos".
 
 
-## Avance de la Unidad I
+## Features pendientes
 
-La primera versión incluye:
+- **Consultar el mapa y la ruta de entrega** (feature 2 de la consigna): hoy existe la pantalla, pero sin el mapa.
+- Contenidos de la materia que todavía se van a incorporar: tema centralizado (`ThemeProvider`), `SafeArea`, paginación de listas y tests (Jest + React Native Testing Library).
 
-- pantalla principal relacionada con la temática elegida;
-- uso de `View`, `Text`, `Image` y `ScrollView`;
-- imagen local almacenada en `assets/images`;
-- datos estáticos para representar pedidos;
-- componentes reutilizables `MenuButton` y `PedidoCard`;
-- comunicación entre componentes mediante `props`;
-- navegación inicial mediante Expo Router.
 
-La imagen principal se implementó en `src/app/index.tsx` utilizando el componente `Image` de React Native y una ruta local con `require()`.
+## Avance en la materia
+
+- **Expo Router**: navegación tipo Stack (`push`, `back`, `replace`) y envío de datos entre pantallas con parámetros (`useLocalSearchParams`).
+- **Componentes de React Native**: `View`, `Text`, `Image`, `TextInput`, `Pressable`, `TouchableOpacity`, `FlatList`, `ActivityIndicator` y `KeyboardAvoidingView`.
+- **Estilos** con `StyleSheet` y listas de estilos condicionales.
+- **Estado local** con `useState` (formularios y pestañas).
+- **TanStack Query**: `useQuery`, `queryKey`, caché compartido entre pestañas y actualización al volver a una pantalla (`useFocusEffect`).
+- **Zustand**: store global con el usuario de la sesión.
+- **Hook propio** (`useEnvios`) para no repetir la lógica de consulta.
+- **Íconos** con `@expo/vector-icons`.
+- **Componentes reutilizables** (`MenuButton`, `PedidoCard`) y comunicación mediante `props`
 
 ## Tecnologías
 
@@ -48,6 +55,10 @@ La imagen principal se implementó en `src/app/index.tsx` utilizando el componen
 - Expo SDK 57
 - Expo Router
 - TypeScript
+- TanStack Query
+- Zustand
+- Expo SecureStore
+- Backend del proyecto de tesis: Node.js, Express y SQL Server (autenticación con JWT)
 - Android Studio / Android Emulator
 - Visual Studio Code
 - Git y GitHub
@@ -64,21 +75,27 @@ SalusApp-Mobile/
 │   │   ├── _layout.tsx
 │   │   ├── index.tsx
 │   │   ├── login.tsx
-│   │   ├── pedidos.tsx
+│   │   ├── envios.tsx
 │   │   ├── confirmar.tsx
-│   │   ├── mapa.tsx
-│   │   └── historial.tsx
+│   │   └── mapa.tsx
 │   ├── components/
 │   │   ├── MenuButton.tsx
-│   │   └── PedidoCard.tsx
+│   │   ├── PedidoCard.tsx
+│   │   ├── PendientesTab.tsx
+│   │   └── HistorialTab.tsx
 │   ├── constants/
 │   │   └── api.ts
-│   └── services/
-│       └── auth.ts
+│   ├── hooks/
+│   │   └── useEnvios.ts
+│   ├── services/
+│   │   └── auth.ts
+│   └── store/
+│       └── useSessionStore.ts
 ├── app.json
 ├── package.json
 └── README.md
 ```
+
 
 ## Ejecución
 
@@ -98,5 +115,5 @@ Con el emulador de Android encendido, presionar `a` en la terminal de Expo.
 
 ## Desarrollo incremental
 
-Esta entrega conecta la app al backend real del sistema (login, pedidos, historial y confirmación de entregas). Queda pendiente la feature de mapa y ruta de entrega, que se incorporará en la próxima etapa.
+Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial y confirmación de entregas, con navegación por pestañas y estado de sesión. Queda pendiente la feature de mapa y ruta de entrega, además de los contenidos de la materia indicados en "Features pendientes", que se incorporarán en las próximas etapas.
 
