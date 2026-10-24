@@ -4,8 +4,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import MenuButton from "../components/MenuButton";
-
 
 
 export default function Index() {
@@ -14,7 +14,7 @@ export default function Index() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const logout = useSessionStore((state) => state.logout);
-
+  const insets = useSafeAreaInsets();
 
   async function handleLogout() {
     await SecureStore.deleteItemAsync("token");
@@ -27,7 +27,7 @@ export default function Index() {
   return (
     <ScrollView
       style={styles.container}
-      contentContainerStyle={styles.content}
+      contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + 20 }]}
       showsVerticalScrollIndicator={false}
     >
       <Image

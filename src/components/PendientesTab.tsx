@@ -24,7 +24,7 @@ export function PendientesTab() {
                         nroPedido={envio.nro_pedido}
                         Cliente={envio.contacto_receptor}
                         estado={envio.resultado_entrega ? "Entregado" : "Pendiente"}
-                        fecha={envio.fehca_despacho}
+                        fecha={envio.fecha_despacho}
                     />
                 </Pressable>
             )}

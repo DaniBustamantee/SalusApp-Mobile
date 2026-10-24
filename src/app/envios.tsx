@@ -2,7 +2,7 @@ import { HistorialTab } from "@/components/HistorialTab";
 import { PendientesTab } from "@/components/PendientesTab";
 import { useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 const TABS = [
@@ -18,7 +18,7 @@ export default function Envios() {
 
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <View style={styles.tabBar}>
                 {TABS.map((tab) => {
                     const isActive = activeTab.id === tab.id;
@@ -39,7 +39,7 @@ export default function Envios() {
             <View style={styles.content}>
                 {activeTab.component}
             </View>
-        </View>
+        </SafeAreaView>
     );
 }
 

@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { useState } from "react";
 import { Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput } from "react-native";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 
 
 
@@ -30,50 +30,53 @@ export default function Login() {
         }
     }
     return (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}>
+        <SafeAreaView style={styles.safe}>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}>
 
 
-            <Image
-                source={require("../../assets/images/logo-vitabiosa.png")}
-                style={styles.logo}
-                resizeMode="contain"
-                accessibilityLabel="Logo de Vita Biosa"
-            />
+                <Image
+                    source={require("../../assets/images/logo-vitabiosa.png")}
+                    style={styles.logo}
+                    resizeMode="contain"
+                    accessibilityLabel="Logo de Vita Biosa"
+                />
 
-            <Text style={styles.titulo}>Inicia Sesion</Text>
+                <Text style={styles.titulo}>Inicia Sesion</Text>
 
-            <TextInput
-                style={styles.input}
-                value={email}
-                onChangeText={setEmail}
-                placeholder="Email"
-                autoCapitalize="none"
-                keyboardType="email-address"
-            />
+                <TextInput
+                    style={styles.input}
+                    value={email}
+                    onChangeText={setEmail}
+                    placeholder="Email"
+                    autoCapitalize="none"
+                    keyboardType="email-address"
+                />
 
-            <TextInput
-                style={styles.input}
-                value={password}
-                onChangeText={setPassword}
-                placeholder="Contraseña"
-                secureTextEntry
-            />
+                <TextInput
+                    style={styles.input}
+                    value={password}
+                    onChangeText={setPassword}
+                    placeholder="Contraseña"
+                    secureTextEntry
+                />
 
-            {error !== "" && <Text style={styles.error}>{error}</Text>}
+                {error !== "" && <Text style={styles.error}>{error}</Text>}
 
-            <Pressable style={styles.boton} onPress={handleLogin}>
-                <Text style={styles.botonTexto}>Ingresar</Text>
-            </Pressable>
+                <Pressable style={styles.boton} onPress={handleLogin}>
+                    <Text style={styles.botonTexto}>Ingresar</Text>
+                </Pressable>
 
-        </KeyboardAvoidingView>
+            </KeyboardAvoidingView>
+        </SafeAreaView>
     );
 
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, justifyContent: "center", padding: 24, backgroundColor: "#f9f9f9" },
+    safe: { flex: 1, backgroundColor: "#f9f9f9" },
+    container: { flex: 1, justifyContent: "center", padding: 24, },
     logo: { width: 140, height: 140, alignSelf: "center", marginBottom: 12 },
     titulo: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 24 },
     input: { backgroundColor: "#fff", borderWidth: 1, borderColor: "#ddd", borderRadius: 8, padding: 14, marginBottom: 14, fontSize: 16 },
