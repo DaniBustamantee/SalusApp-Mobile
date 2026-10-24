@@ -7,12 +7,12 @@ import { StyleSheet, Text, View } from "react-native";
 
 type Props = {
     nroPedido: string;
-    Cliente: string;
-    estado: string;
-    fecha: string;
+    Cliente: string | null;
+    estado: string | null;
+    fecha: string | null;
 };
 
-function iconos(estado: string) {
+function iconos(estado: string | null) {
     if (estado === "completo") return { icono: "checkmark-circle", color: "#2ecc71" } as const;
     if (estado === "parcial") return { icono: "alert-circle", color: "#f39c12" } as const;
     if (estado === "fallido") return { icono: "close-circle", color: "#e74c3c" } as const
@@ -27,14 +27,14 @@ export default function PedidoCard({ nroPedido, Cliente, estado, fecha }: Props)
 
 
     return (
-        <View style={[styles.card,{borderLeftColor:color }]}>
+        <View style={[styles.card, { borderLeftColor: color }]}>
             <View style={styles.encabezado}>
                 <Text style={styles.numero}>Pedido {nroPedido}</Text>
                 <Ionicons name={icono} size={24} color={color} />
             </View>
-            <Text style={styles.dato}>Cliente: {Cliente}</Text>
-            <Text style={styles.dato}>Estado: {estado}</Text>
-            <Text style={styles.dato}>Fecha: {fecha}</Text>
+            <Text style={styles.dato}>Cliente: {Cliente ?? "-"}</Text>
+            <Text style={styles.dato}>Estado: {estado ?? "-"}</Text>
+            <Text style={styles.dato}>Fecha: {fecha ?? "-"}</Text>
         </View>
     );
 }

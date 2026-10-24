@@ -1,10 +1,11 @@
 import { fetchAuth } from "@/services/auth";
+import { Envio } from "@/types/envio";
 import { useQuery } from "@tanstack/react-query";
 import { useFocusEffect } from "expo-router";
 import { useCallback } from "react";
 
 export function useEnvios() {
-    const { data: envios = [], isLoading, refetch } = useQuery<any[]>({
+    const { data: envios = [], isLoading, refetch } = useQuery<Envio[]>({
         queryKey: ["mis-envios"],
         queryFn: async () => {
             const res = await fetchAuth("/envios/mis-envios");
