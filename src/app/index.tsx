@@ -40,9 +40,8 @@ export default function Index() {
       <Text style={styles.titulo}>Panel del Repartidor</Text>
       <Text style={styles.saludo}>Hola {usuario?.nombre}</Text>
       <View style={styles.menu}>
-        <MenuButton title=" Pedidos asignados" route="/pedidos" />
+        <MenuButton title=" Mis envíos" route="/envios" />
         <MenuButton title=" Mapa de entrega" route="/mapa" />
-        <MenuButton title=" Historial de entregas" route="/historial" />
         <Pressable style={styles.cerrarsesion} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={20} color={"#e74c3c"}></Ionicons>
           <Text style={styles.cerrarTexto}>Cerrar sesion</Text>
