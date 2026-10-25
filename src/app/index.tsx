@@ -3,10 +3,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
+import { useMemo } from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { DefaultTheme, useTheme } from "styled-components/native";
 import MenuButton from "../components/MenuButton";
-
 
 export default function Index() {
 
@@ -15,6 +16,9 @@ export default function Index() {
   const queryClient = useQueryClient();
   const logout = useSessionStore((state) => state.logout);
   const insets = useSafeAreaInsets();
+  const theme = useTheme();
+  const styles = useMemo(() => crearEstilos(theme), [theme]);
+
 
   async function handleLogout() {
     await SecureStore.deleteItemAsync("token");
@@ -43,7 +47,7 @@ export default function Index() {
         <MenuButton title=" Mis envíos" route="/envios" />
         <MenuButton title=" Mapa de entrega" route="/mapa" />
         <Pressable style={styles.cerrarsesion} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={20} color={"#e74c3c"}></Ionicons>
+          <Ionicons name="log-out-outline" size={20} color={theme.colors.danger}></Ionicons>
           <Text style={styles.cerrarTexto}>Cerrar sesion</Text>
         </Pressable>
       </View>
@@ -51,8 +55,8 @@ export default function Index() {
   );
 }
 
-const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f9f9f9" },
+const crearEstilos = (theme: DefaultTheme) => StyleSheet.create({
+  container: { flex: 1, backgroundColor: theme.colors.background },
   content: { padding: 20 },
   logo: {
     width: 160,
@@ -62,7 +66,7 @@ const styles = StyleSheet.create({
   },
   titulo: { fontSize: 24, fontWeight: "bold", marginBottom: 20, textAlign: "center" },
   menu: { flexDirection: "column", gap: 15 },
-  saludo: { textAlign: "center", fontSize: 16, color: "#0f0101", marginBottom: 20 },
-  cerrarsesion: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, padding: 15, borderRadius: 8, borderWidth: 1, borderColor: "#e74c3c", backgroundColor: "#fff" },
-  cerrarTexto: { color: "#e74c3c", fontWeight: "bold", fontSize: 16 }
+  saludo: { textAlign: "center", fontSize: 16, color: theme.colors.text, marginBottom: 20 },
+  cerrarsesion: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, padding: 15, borderRadius: 8, borderWidth: 1, borderColor: theme.colors.danger, backgroundColor: theme.colors.surface },
+  cerrarTexto: { color: theme.colors.danger, fontWeight: "bold", fontSize: 16 }
 });

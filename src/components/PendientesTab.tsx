@@ -2,13 +2,15 @@ import PedidoCard from "@/components/PedidoCard";
 import { useEnvios } from "@/hooks/useEnvios";
 import { useRouter } from "expo-router";
 import { ActivityIndicator, FlatList, Pressable } from "react-native";
-
+import { useTheme } from "styled-components/native";
 export function PendientesTab() {
 
     const router = useRouter();
     const { envios, isLoading } = useEnvios();
+    const theme = useTheme();
 
-    if (isLoading) return <ActivityIndicator size="large" color="#2ecc71" />;
+
+    if (isLoading) return <ActivityIndicator size="large" color={theme.colors.primary} />;
 
     return (
         <FlatList

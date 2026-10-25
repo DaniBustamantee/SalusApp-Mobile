@@ -1,11 +1,17 @@
 import PedidoCard from "@/components/PedidoCard";
 import { useEnvios } from "@/hooks/useEnvios";
 import { ActivityIndicator, FlatList } from "react-native";
+import { useTheme } from "styled-components/native";
+
+
 
 export function HistorialTab() {
     const { envios, isLoading } = useEnvios();
+    const theme = useTheme();
 
-    if (isLoading) return <ActivityIndicator size="large" color="#2ecc71" />;
+
+
+    if (isLoading) return <ActivityIndicator size="large" color= {theme.colors.primary}/>;
 
     return (
         <FlatList

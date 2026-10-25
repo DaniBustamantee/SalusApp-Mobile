@@ -2,10 +2,10 @@ import { login } from "@/services/auth";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useRouter } from "expo-router";
 import * as SecureStore from "expo-secure-store";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Image, KeyboardAvoidingView, Platform, Pressable, StyleSheet, Text, TextInput } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-
+import { DefaultTheme, useTheme } from "styled-components/native";
 
 
 export default function Login() {
@@ -15,6 +15,9 @@ export default function Login() {
     const [error, setError] = useState("");
     const router = useRouter();
     const setUsuario = useSessionStore((state) => state.setUsuario);
+    const theme = useTheme();
+    const styles = useMemo(() => crearEstilos(theme), [theme]);
+
 
     async function handleLogin() {
 
@@ -74,13 +77,13 @@ export default function Login() {
 
 }
 
-const styles = StyleSheet.create({
-    safe: { flex: 1, backgroundColor: "#f9f9f9" },
+const crearEstilos = (theme: DefaultTheme) => StyleSheet.create({
+    safe: { flex: 1, backgroundColor: theme.colors.background },
     container: { flex: 1, justifyContent: "center", padding: 24, },
     logo: { width: 140, height: 140, alignSelf: "center", marginBottom: 12 },
     titulo: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 24 },
-    input: { backgroundColor: "#fff", borderWidth: 1, borderColor: "#ddd", borderRadius: 8, padding: 14, marginBottom: 14, fontSize: 16 },
-    error: { color: "#e74c3c", textAlign: "center", marginBottom: 14 },
-    boton: { backgroundColor: "#2ecc71", padding: 15, borderRadius: 8, alignItems: "center", marginTop: 6 },
-    botonTexto: { color: "#fff", fontWeight: "bold", fontSize: 16 },
-})
+    input: { backgroundColor: theme.colors.surface, borderWidth: 1, borderColor: theme.colors.border, borderRadius: 8, padding: 14, marginBottom: 14, fontSize: 16 },
+    error: { color: theme.colors.danger, textAlign: "center", marginBottom: 14 },
+    boton: { backgroundColor: theme.colors.primary, padding: 15, borderRadius: 8, alignItems: "center", marginTop: 6 },
+    botonTexto: { color: theme.colors.surface, fontWeight: "bold", fontSize: 16 },
+});
