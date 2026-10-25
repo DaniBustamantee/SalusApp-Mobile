@@ -42,13 +42,13 @@ export default function Index() {
       />
 
       <Text style={styles.titulo}>Panel del Repartidor</Text>
-      <Text style={styles.saludo}>Hola {usuario?.nombre}</Text>
+      <Text style={styles.saludo}>Hola, {usuario?.nombre}</Text>
       <View style={styles.menu}>
         <MenuButton title=" Mis envíos" route="/envios" />
         <MenuButton title=" Mapa de entrega" route="/mapa" />
         <Pressable style={styles.cerrarsesion} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={20} color={theme.colors.danger}></Ionicons>
-          <Text style={styles.cerrarTexto}>Cerrar sesion</Text>
+          <Text style={styles.cerrarTexto}>Cerrar sesión</Text>
         </Pressable>
       </View>
     </ScrollView>

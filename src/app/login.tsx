@@ -29,7 +29,7 @@ export default function Login() {
             setUsuario(data.usuario);
             router.replace("/")
         } catch (e) {
-            setError(e instanceof Error ? e.message : "Error");
+            setError(e instanceof Error ? e.message : "Error inesperado");
         }
     }
     return (
@@ -46,7 +46,7 @@ export default function Login() {
                     accessibilityLabel="Logo de Vita Biosa"
                 />
 
-                <Text style={styles.titulo}>Inicia Sesion</Text>
+                <Text style={styles.titulo}>Iniciar sesión</Text>
 
                 <TextInput
                     style={styles.input}

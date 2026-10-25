@@ -10,7 +10,7 @@ export function useEnvios() {
         queryFn: async () => {
             const res = await fetchAuth("/envios/mis-envios");
             const data = await res.json();
-            if (!res.ok) throw new Error(data.error || "Error al obtener envios");
+            if (!res.ok) throw new Error(data.error || "Error al obtener envíos");
             return data;
         },
     });
