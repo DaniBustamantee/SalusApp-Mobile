@@ -3,14 +3,23 @@ import { useEnvios } from "@/hooks/useEnvios";
 import { useRouter } from "expo-router";
 import { ActivityIndicator, FlatList, Pressable } from "react-native";
 import { useTheme } from "styled-components/native";
+import MensajeError from "./MensajeError";
+
+
+
 export function PendientesTab() {
 
     const router = useRouter();
-    const { envios, isLoading } = useEnvios();
+    const { envios, isLoading, error, refetch } = useEnvios();
     const theme = useTheme();
 
 
+
     if (isLoading) return <ActivityIndicator size="large" color={theme.colors.primary} />;
+
+    if (error && envios.length === 0) {
+        return <MensajeError mensaje={error.message} onReintentar={() => refetch()} />
+    }
 
     return (
         <FlatList
