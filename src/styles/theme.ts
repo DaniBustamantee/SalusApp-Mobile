@@ -10,6 +10,7 @@ export type AppTheme = {
         border: string;
         textSecondary: string;
         text: string;
+        secondary: string;
     };
     spacing: {
         small: number;
@@ -33,6 +34,7 @@ export const theme: AppTheme = {
         border: "#ddd",
         textSecondary: "#555",
         text: "#111",
+        secondary: "#1e3a5f"
     },
     spacing: {
         small: 8,
