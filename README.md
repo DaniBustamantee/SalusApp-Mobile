@@ -23,31 +23,38 @@ El grupo está compuesto por 3 integrantes, por lo que se definieron las 4 Featu
 1. **Consultar pedidos asignados**: pestaña "Pendientes" de la pantalla "Mis envíos". Muestra los envíos pendientes del repartidor con datos reales del backend, con un icono y un color según el estado. Al tocar una tarjeta se abre la confirmación de la entrega.
 2. **Consultar el historial de entregas**: pestaña "Historial" de la misma pantalla. Muestra las entregas ya confirmadas con su resultado real (completo, parcial o fallido).
 3. **Confirmar el resultado de una entrega**: se elige el resultado, se agregan observaciones y se envía al backend. Al volver, las listas se actualizan solas.
+4. **Mapa de entrega**: muestra los envíos pendientes como paradas numeradas sobre un mapa (OpenStreetMap con Leaflet, dentro de un `WebView`), el depósito como punto de partida y, con un botón, la **posición actual del repartidor** obtenida con el GPS. Avisa cuántos envíos no se pudieron ubicar.
 
 Además de las features de la consigna, se implementó:
 
 - **Login con autenticación real** contra el backend, con JWT guardado de forma segura (`expo-secure-store`).
 - **Sesión del usuario**: saludo con el nombre del repartidor y botón de cerrar sesión, que borra el token, vacía el estado global y el caché de consultas.
 - **Navegación por pestañas** en "Mis envíos".
+- **Tema centralizado** (`ThemeProvider`) y **zonas seguras** (`SafeArea`) en las pantallas.
+- **Estados de carga, error y lista vacía**: indicador de carga, mensaje de error en español con botón "Reintentar" cuando no hay conexión.
 
 
 ## Features pendientes
 
-- **Consultar el mapa y la ruta de entrega** (feature 2 de la consigna): hoy existe la pantalla, pero sin el mapa.
-- Contenidos de la materia que todavía se van a incorporar: tema centralizado (`ThemeProvider`), `SafeArea`, paginación de listas y tests (Jest + React Native Testing Library).
-
+- **Trazado de la ruta de entrega** sobre el mapa (línea entre las paradas y orden sugerido), que completa la feature 2 de la consigna.
+- **Confirmar una entrega desde el mapa**, tocando una parada.
+- **Paginación de las listas**: hoy el backend devuelve todos los envíos juntos; falta agregarle los parámetros `page` y `limit` y usar `useInfiniteQuery` en la app.
+- **Tests** con Jest y React Native Testing Library.
 
 ## Avance en la materia
 
 - **Expo Router**: navegación tipo Stack (`push`, `back`, `replace`) y envío de datos entre pantallas con parámetros (`useLocalSearchParams`).
-- **Componentes de React Native**: `View`, `Text`, `Image`, `TextInput`, `Pressable`, `TouchableOpacity`, `FlatList`, `ActivityIndicator` y `KeyboardAvoidingView`.
-- **Estilos** con `StyleSheet` y listas de estilos condicionales.
-- **Estado local** con `useState` (formularios y pestañas).
-- **TanStack Query**: `useQuery`, `queryKey`, caché compartido entre pestañas y actualización al volver a una pantalla (`useFocusEffect`).
+- **Componentes de React Native**: `View`, `Text`, `Image`, `TextInput`, `Pressable`, `TouchableOpacity`, `FlatList`, `ActivityIndicator`, `KeyboardAvoidingView` y `WebView`.
+- **Estilos**: `StyleSheet` con listas de estilos condicionales, y **styled-components** con `ThemeProvider` (`props.theme` y `useTheme`).
+- **Zonas seguras**: `SafeAreaView` y `useSafeAreaInsets`.
+- **Estado local** con `useState`, `useMemo` y `useRef`.
+- **TanStack Query**: `useQuery`, `queryKey`, caché compartido entre pantallas, estados de carga y error, y actualización al volver a una pantalla (`useFocusEffect`).
 - **Zustand**: store global con el usuario de la sesión.
-- **Hook propio** (`useEnvios`) para no repetir la lógica de consulta.
+- **TypeScript**: tipos propios (`Envio`).
+- **Hook propio** (`useEnvios`).
+- **APIs nativas**: GPS con `expo-location`, incluido el pedido de permisos.
 - **Íconos** con `@expo/vector-icons`.
-- **Componentes reutilizables** (`MenuButton`, `PedidoCard`) y comunicación mediante `props`
+- **Componentes reutilizables** (`MenuButton`, `PedidoCard`, `MensajeError`) y comunicación mediante `props`.`
 
 ## Tecnologías
 
@@ -57,7 +64,12 @@ Además de las features de la consigna, se implementó:
 - TypeScript
 - TanStack Query
 - Zustand
+- styled-components
 - Expo SecureStore
+- Expo Location
+- react-native-webview
+- Leaflet y OpenStreetMap (mapa)
+- API Georef de datos.gob.ar (datos de localidades)
 - Backend del proyecto de tesis: Node.js, Express y SQL Server (autenticación con JWT)
 - Android Studio / Android Emulator
 - Visual Studio Code
@@ -69,7 +81,8 @@ Además de las features de la consigna, se implementó:
 SalusApp-Mobile/
 ├── assets/
 │   └── images/
-│       └── logo-vitabiosa.png
+├── scripts/
+│   └── generar-localidades.mjs
 ├── src/
 │   ├── app/
 │   │   ├── _layout.tsx
@@ -82,15 +95,27 @@ SalusApp-Mobile/
 │   │   ├── MenuButton.tsx
 │   │   ├── PedidoCard.tsx
 │   │   ├── PendientesTab.tsx
-│   │   └── HistorialTab.tsx
+│   │   ├── HistorialTab.tsx
+│   │   └── MensajeError.tsx
 │   ├── constants/
-│   │   └── api.ts
+│   │   ├── api.ts
+│   │   └── ciudades.ts
+│   ├── data/
+│   │   └── localidades.json
 │   ├── hooks/
 │   │   └── useEnvios.ts
 │   ├── services/
 │   │   └── auth.ts
-│   └── store/
-│       └── useSessionStore.ts
+│   ├── store/
+│   │   └── useSessionStore.ts
+│   ├── styles/
+│   │   ├── theme.ts
+│   │   └── styled.d.ts
+│   ├── types/
+│   │   └── envio.ts
+│   └── utils/
+│       ├── armarParadas.ts
+│       └── construirHtmlMapa.ts
 ├── app.json
 ├── package.json
 └── README.md
@@ -115,5 +140,5 @@ Con el emulador de Android encendido, presionar `a` en la terminal de Expo.
 
 ## Desarrollo incremental
 
-Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial y confirmación de entregas, con navegación por pestañas y estado de sesión. Queda pendiente la feature de mapa y ruta de entrega, además de los contenidos de la materia indicados en "Features pendientes", que se incorporarán en las próximas etapas.
+Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial, confirmación de entregas y un mapa con las paradas y la posición del repartidor, con navegación por pestañas, estado de sesión y tema centralizado. Quedan pendientes el trazado de la ruta, la paginación y los tests, que se incorporarán en las próximas etapas.
 
