@@ -2,27 +2,29 @@ import type { Coordenadas } from "@/constants/ciudades";
 
 
 export type Parada = {
-    id: number;
-    numero: number;
-    lat: number;
-    lng: number;
-    titulo: string;
-    detalle: string;
+  id: number;
+  numero: number;
+  lat: number;
+  lng: number;
+  titulo: string;
+  detalle: string;
 };
 
 type Colores = {
-    colorParada: string;
-    colorDeposito: string;
+  colorParada: string;
+  colorDeposito: string;
+  colorRuta: string;
 };
 
 export function construirHtmlMapa(
-    paradas: Parada[],
-    deposito: Coordenadas & { nombre: string },
-    { colorParada, colorDeposito }: Colores
+  paradas: Parada[],
+  deposito: Coordenadas & { nombre: string },
+  { colorParada, colorDeposito, colorRuta }: Colores,
+  trazado: [number, number][] = []
 ) {
-    const datos = JSON.stringify({ paradas, deposito }).replace(/</g, "\\u003c");
+  const datos = JSON.stringify({ paradas, deposito, trazado, colorRuta }).replace(/</g, "\\u003c");
 
-    return `<!DOCTYPE html>
+  return `<!DOCTYPE html>
     <html>
     <head>
 <meta charset="utf-8" />
@@ -67,14 +69,19 @@ export function construirHtmlMapa(
     attribution: "&copy; OpenStreetMap"
   }).addTo(mapa);
 
-  var puntos = [[datos.deposito.lat, datos.deposito.lng]];
+  var limites = L.latLngBounds([[datos.deposito.lat, datos.deposito.lng]]);
+
+  if(datos.trazado.length > 0){
+  var linea = L.polyline(datos.trazado, {color: datos.colorRuta, weight: 5, opacity: 0.8}).addTo(mapa);
+  limites.extend(linea.getBounds())
+  }
 
   L.marker([datos.deposito.lat, datos.deposito.lng], { icon: icono("deposito", "&#127981;") })
     .addTo(mapa)
     .bindPopup("<strong>" + esc(datos.deposito.nombre) + "</strong><br>Punto de partida");
 
   datos.paradas.forEach(function (p) {
-    puntos.push([p.lat, p.lng]);
+    limites.extend([p.lat, p.lng]);
     L.marker([p.lat, p.lng], { icon: icono("parada", p.numero) })
       .addTo(mapa)
       .bindPopup("<strong>" + esc(p.titulo) + "</strong><br>" + esc(p.detalle));
@@ -98,7 +105,7 @@ mapa.setView([lat, lng], 14);
   function encuadrar() {
     mapa.invalidateSize();
     if(encuadreAutomatico){
-    mapa.fitBounds(puntos, { padding: [40, 40], maxZoom: 13 });
+    mapa.fitBounds(limites, { padding: [40, 40], maxZoom: 13 });
   }
 }
 

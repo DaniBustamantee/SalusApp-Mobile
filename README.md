@@ -23,7 +23,7 @@ El grupo está compuesto por 3 integrantes, por lo que se definieron las 4 Featu
 1. **Consultar pedidos asignados**: pestaña "Pendientes" de la pantalla "Mis envíos". Muestra los envíos pendientes del repartidor con datos reales del backend, con un icono y un color según el estado. Al tocar una tarjeta se abre la confirmación de la entrega.
 2. **Consultar el historial de entregas**: pestaña "Historial" de la misma pantalla. Muestra las entregas ya confirmadas con su resultado real (completo, parcial o fallido).
 3. **Confirmar el resultado de una entrega**: se elige el resultado, se agregan observaciones y se envía al backend. Al volver, las listas se actualizan solas.
-4. **Mapa de entrega**: muestra los envíos pendientes como paradas numeradas sobre un mapa (OpenStreetMap con Leaflet, dentro de un `WebView`), el depósito como punto de partida y, con un botón, la **posición actual del repartidor** obtenida con el GPS. Avisa cuántos envíos no se pudieron ubicar.
+4. **Mapa de entrega**: muestra los envíos pendientes como paradas numeradas sobre un mapa (OpenStreetMap con Leaflet, dentro de un `WebView`), el depósito como punto de partida y, con un botón, la **posición actual del repartidor** obtenida con el GPS. Avisa cuántos envíos no se pudieron ubicar. Calcula el **orden sugerido de las paradas** y dibuja la **ruta por las calles** con la distancia y el tiempo estimados. Si el cálculo falla, el mapa se muestra igual, con un aviso.
 
 Además de las features de la consigna, se implementó:
 
@@ -36,7 +36,6 @@ Además de las features de la consigna, se implementó:
 
 ## Features pendientes
 
-- **Trazado de la ruta de entrega** sobre el mapa (línea entre las paradas y orden sugerido), que completa la feature 2 de la consigna.
 - **Confirmar una entrega desde el mapa**, tocando una parada.
 - **Paginación de las listas**: hoy el backend devuelve todos los envíos juntos; falta agregarle los parámetros `page` y `limit` y usar `useInfiniteQuery` en la app.
 - **Tests** con Jest y React Native Testing Library.
@@ -49,12 +48,13 @@ Además de las features de la consigna, se implementó:
 - **Zonas seguras**: `SafeAreaView` y `useSafeAreaInsets`.
 - **Estado local** con `useState`, `useMemo` y `useRef`.
 - **TanStack Query**: `useQuery`, `queryKey`, caché compartido entre pantallas, estados de carga y error, y actualización al volver a una pantalla (`useFocusEffect`).
+- **Consumo de una API externa**: cálculo de la ruta con OSRM, usando `useQuery` con `retry`, `staleTime` y `enabled`, y manejo del caso en que el servicio falla.
 - **Zustand**: store global con el usuario de la sesión.
 - **TypeScript**: tipos propios (`Envio`).
 - **Hook propio** (`useEnvios`).
 - **APIs nativas**: GPS con `expo-location`, incluido el pedido de permisos.
 - **Íconos** con `@expo/vector-icons`.
-- **Componentes reutilizables** (`MenuButton`, `PedidoCard`, `MensajeError`) y comunicación mediante `props`.`
+- **Componentes reutilizables** (`MenuButton`, `PedidoCard`, `MensajeError`) y comunicación mediante `props`.
 
 ## Tecnologías
 
@@ -70,6 +70,7 @@ Además de las features de la consigna, se implementó:
 - react-native-webview
 - Leaflet y OpenStreetMap (mapa)
 - API Georef de datos.gob.ar (datos de localidades)
+- OSRM (servicio público de cálculo de rutas)
 - Backend del proyecto de tesis: Node.js, Express y SQL Server (autenticación con JWT)
 - Android Studio / Android Emulator
 - Visual Studio Code
@@ -105,7 +106,8 @@ SalusApp-Mobile/
 │   ├── hooks/
 │   │   └── useEnvios.ts
 │   ├── services/
-│   │   └── auth.ts
+│   │   ├── auth.ts
+│   │   └── rutas.ts
 │   ├── store/
 │   │   └── useSessionStore.ts
 │   ├── styles/
@@ -115,7 +117,8 @@ SalusApp-Mobile/
 │   │   └── envio.ts
 │   └── utils/
 │       ├── armarParadas.ts
-│       └── construirHtmlMapa.ts
+│       ├── construirHtmlMapa.ts
+│       └── formatearRuta.ts
 ├── app.json
 ├── package.json
 └── README.md
@@ -140,5 +143,5 @@ Con el emulador de Android encendido, presionar `a` en la terminal de Expo.
 
 ## Desarrollo incremental
 
-Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial, confirmación de entregas y un mapa con las paradas y la posición del repartidor, con navegación por pestañas, estado de sesión y tema centralizado. Quedan pendientes el trazado de la ruta, la paginación y los tests, que se incorporarán en las próximas etapas.
+Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial, confirmación de entregas y un mapa con las paradas, la ruta sugerida y la posición del repartidor, con navegación por pestañas, estado de sesión y tema centralizado. Quedan pendientes la confirmación de entregas desde el mapa, la paginación y los tests, que se incorporarán en las próximas etapas.
 
