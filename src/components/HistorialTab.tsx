@@ -6,7 +6,7 @@ import MensajeError from "./MensajeError";
 
 
 export function HistorialTab() {
-    const { envios, isLoading, error, refetch } = useEnvios();
+    const { envios, isLoading, error, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = useEnvios("entregado");
     const theme = useTheme();
 
 
@@ -20,8 +20,11 @@ export function HistorialTab() {
 
     return (
         <FlatList
-            data={envios.filter((envio) => envio.resultado_entrega)}
+            data={envios}
             keyExtractor={(envio) => String(envio.id_envio)}
+            onEndReached={() => hasNextPage && !isFetchingNextPage && fetchNextPage()}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={isFetchingNextPage ? <ActivityIndicator color={theme.colors.primary} /> : null}
             renderItem={({ item: envio }) => (
                 <PedidoCard
                     nroPedido={envio.nro_pedido}

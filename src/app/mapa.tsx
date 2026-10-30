@@ -1,6 +1,6 @@
 import MensajeError from "@/components/MensajeError";
 import { DEPOSITO } from "@/constants/ciudades";
-import { useEnvios } from "@/hooks/useEnvios";
+import { useTodosLosPendientes } from "@/hooks/useEnvios";
 import { calcularRuta } from "@/services/rutas";
 import { armarParadas } from "@/utils/armarParadas";
 import { construirHtmlMapa } from "@/utils/construirHtmlMapa";
@@ -18,7 +18,7 @@ import { DefaultTheme, useTheme } from "styled-components/native";
 export default function Mapa() {
   const theme = useTheme();
   const styles = useMemo(() => crearEstilos(theme), [theme]);
-  const { envios, isLoading, error, refetch } = useEnvios();
+  const { envios, isLoading, error, refetch } = useTodosLosPendientes();
   const webViewRef = useRef<WebView>(null);
   const [ubicando, setUbicando] = useState(false);
   const [errorUbicacion, setErrorUbicacion] = useState("");

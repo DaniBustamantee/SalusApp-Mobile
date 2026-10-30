@@ -20,8 +20,8 @@ Brindar al repartidor una herramienta móvil que le permita consultar sus pedido
 
 El grupo está compuesto por 3 integrantes, por lo que se definieron las 4 Features requeridas por la consigna. La app se conecta al backend real del proyecto de tesis.
 
-1. **Consultar pedidos asignados**: pestaña "Pendientes" de la pantalla "Mis envíos". Muestra los envíos pendientes del repartidor con datos reales del backend, con un icono y un color según el estado. Al tocar una tarjeta se abre la confirmación de la entrega.
-2. **Consultar el historial de entregas**: pestaña "Historial" de la misma pantalla. Muestra las entregas ya confirmadas con su resultado real (completo, parcial o fallido).
+1. **Consultar pedidos asignados**: pestaña "Pendientes" de la pantalla "Mis envíos". Muestra los envíos pendientes del repartidor con datos reales del backend, con un icono y un color según el estado. Al tocar una tarjeta se abre la confirmación de la entrega. Las listas se cargan por páginas de a 10 y piden la siguiente al llegar al final.
+2. **Consultar el historial de entregas**: pestaña "Historial" de la misma pantalla. Muestra las entregas ya confirmadas con su resultado real (completo, parcial o fallido). Las listas se cargan por páginas de a 10 y piden la siguiente al llegar al final.
 3. **Confirmar el resultado de una entrega**: se elige el resultado, se agregan observaciones y se envía al backend. Al volver, las listas se actualizan solas.
 4. **Mapa de entrega**: muestra los envíos pendientes como paradas numeradas sobre un mapa (OpenStreetMap con Leaflet, dentro de un `WebView`), el depósito como punto de partida y, con un botón, la **posición actual del repartidor** obtenida con el GPS. Avisa cuántos envíos no se pudieron ubicar. Calcula el **orden sugerido de las paradas** y dibuja la **ruta por las calles** con la distancia y el tiempo estimados. Si el cálculo falla, el mapa se muestra igual, con un aviso.
 
@@ -37,7 +37,6 @@ Además de las features de la consigna, se implementó:
 ## Features pendientes
 
 - **Confirmar una entrega desde el mapa**, tocando una parada.
-- **Paginación de las listas**: hoy el backend devuelve todos los envíos juntos; falta agregarle los parámetros `page` y `limit` y usar `useInfiniteQuery` en la app.
 - **Tests** con Jest y React Native Testing Library.
 
 ## Avance en la materia
@@ -48,6 +47,7 @@ Además de las features de la consigna, se implementó:
 - **Zonas seguras**: `SafeAreaView` y `useSafeAreaInsets`.
 - **Estado local** con `useState`, `useMemo` y `useRef`.
 - **TanStack Query**: `useQuery`, `queryKey`, caché compartido entre pantallas, estados de carga y error, y actualización al volver a una pantalla (`useFocusEffect`).
+- **Paginación**: `useInfiniteQuery` con `getNextPageParam` y `onEndReached` en la `FlatList`; el servidor recibe `page`, `limit` y `estado`, con un `ORDER BY`.
 - **Consumo de una API externa**: cálculo de la ruta con OSRM, usando `useQuery` con `retry`, `staleTime` y `enabled`, y manejo del caso en que el servicio falla.
 - **Zustand**: store global con el usuario de la sesión.
 - **TypeScript**: tipos propios (`Envio`).
@@ -143,5 +143,5 @@ Con el emulador de Android encendido, presionar `a` en la terminal de Expo.
 
 ## Desarrollo incremental
 
-Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial, confirmación de entregas y un mapa con las paradas, la ruta sugerida y la posición del repartidor, con navegación por pestañas, estado de sesión y tema centralizado. Quedan pendientes la confirmación de entregas desde el mapa, la paginación y los tests, que se incorporarán en las próximas etapas.
+Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial, confirmación de entregas y un mapa con las paradas, la ruta sugerida y la posición del repartidor, con navegación por pestañas, estado de sesión y tema centralizado. Quedan pendientes la confirmación de entregas desde el mapa y los tests, que se incorporarán en las próximas etapas.
 

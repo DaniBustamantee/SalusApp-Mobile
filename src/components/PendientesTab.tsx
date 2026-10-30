@@ -10,7 +10,7 @@ import MensajeError from "./MensajeError";
 export function PendientesTab() {
 
     const router = useRouter();
-    const { envios, isLoading, error, refetch } = useEnvios();
+    const { envios, isLoading, error, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = useEnvios("pendiente");
     const theme = useTheme();
 
 
@@ -23,8 +23,11 @@ export function PendientesTab() {
 
     return (
         <FlatList
-            data={envios.filter((envio) => !envio.resultado_entrega)}
+            data={envios}
             keyExtractor={(envio) => String(envio.id_envio)}
+            onEndReached={() => hasNextPage && !isFetchingNextPage && fetchNextPage()}
+            onEndReachedThreshold={0.5}
+            ListFooterComponent={isFetchingNextPage ? <ActivityIndicator color={theme.colors.primary} /> : null}
             renderItem={({ item: envio }) => (
                 <Pressable
                     onPress={() => router.push({
