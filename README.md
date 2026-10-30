@@ -33,12 +33,6 @@ Además de las features de la consigna, se implementó:
 - **Tema centralizado** (`ThemeProvider`) y **zonas seguras** (`SafeArea`) en las pantallas.
 - **Estados de carga, error y lista vacía**: indicador de carga, mensaje de error en español con botón "Reintentar" cuando no hay conexión.
 
-
-## Features pendientes
-
-
-- **Tests** con Jest y React Native Testing Library.
-
 ## Avance en la materia
 
 - **Expo Router**: navegación tipo Stack (`push`, `back`, `replace`) y envío de datos entre pantallas con parámetros (`useLocalSearchParams`).
@@ -56,6 +50,7 @@ Además de las features de la consigna, se implementó:
 - **Comunicación entre la app y el WebView**: la página del mapa le avisa a la app con `postMessage` y la app lo recibe en `onMessage`, validando el mensaje antes de navegar con `router.push`.
 - **Íconos** con `@expo/vector-icons`.
 - **Componentes reutilizables** (`MenuButton`, `PedidoCard`, `MensajeError`) y comunicación mediante `props`.
+- **Tests** con Jest y React Native Testing Library: tests unitarios de funciones puras (`formatearRuta`, `ciudades`, `armarParadas`), del servicio de rutas simulando `fetch` con `jest.fn()` y de un componente (`MensajeError`) con `render`, `screen` y `fireEvent`.
 
 ## Tecnologías
 
@@ -73,6 +68,7 @@ Además de las features de la consigna, se implementó:
 - API Georef de datos.gob.ar (datos de localidades)
 - OSRM (servicio público de cálculo de rutas)
 - Backend del proyecto de tesis: Node.js, Express y SQL Server (autenticación con JWT)
+- Jest y React Native Testing Library (tests)
 - Android Studio / Android Emulator
 - Visual Studio Code
 - Git y GitHub
@@ -98,17 +94,20 @@ SalusApp-Mobile/
 │   │   ├── PedidoCard.tsx
 │   │   ├── PendientesTab.tsx
 │   │   ├── HistorialTab.tsx
-│   │   └── MensajeError.tsx
+│   │   ├── MensajeError.tsx
+│   │   └── MensajeError.test.tsx
 │   ├── constants/
 │   │   ├── api.ts
-│   │   └── ciudades.ts
+│   │   ├── ciudades.ts
+│   │   └── ciudades.test.ts
 │   ├── data/
 │   │   └── localidades.json
 │   ├── hooks/
 │   │   └── useEnvios.ts
 │   ├── services/
 │   │   ├── auth.ts
-│   │   └── rutas.ts
+│   │   ├── rutas.ts
+│   │   └── rutas.test.ts
 │   ├── store/
 │   │   └── useSessionStore.ts
 │   ├── styles/
@@ -118,13 +117,14 @@ SalusApp-Mobile/
 │   │   └── envio.ts
 │   └── utils/
 │       ├── armarParadas.ts
+│       ├── armarParadas.test.ts
 │       ├── construirHtmlMapa.ts
-│       └── formatearRuta.ts
+│       ├── formatearRuta.ts
+│       └── formatearRuta.test.ts
 ├── app.json
 ├── package.json
 └── README.md
 ```
-
 
 ## Ejecución
 
@@ -142,7 +142,13 @@ npx expo start
 
 Con el emulador de Android encendido, presionar `a` en la terminal de Expo.
 
+Correr los tests:
+
+```bash
+npm test
+```
+
 ## Desarrollo incremental
 
-Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial, confirmación de entregas y un mapa con las paradas, la ruta sugerida y la posición del repartidor, con navegación por pestañas, estado de sesión y tema centralizado. Queda pendiente la incorporación de tests, que se hará en las próximas etapas.
+Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial, confirmación de entregas y un mapa con las paradas, la ruta sugerida y la posición del repartidor, con navegación por pestañas, estado de sesión y tema centralizado. Además, la app cuenta con tests unitarios y de componente con Jest y React Native Testing Library, que se ejecutan con `npm test`.
 
