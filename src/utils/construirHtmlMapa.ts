@@ -39,6 +39,10 @@ export function construirHtmlMapa(
     color: #fff; font: bold 12px sans-serif;
   }
   .marcador.parada { background: ${colorParada}; }
+  .confirmar{
+  margin-top: 8px; padding: 6px 10px; border: 0; border-radius: 6px;
+  background: ${colorParada}; color: #fff; font: bold 12px sans-serif;
+  }
   .marcador.deposito { background: ${colorDeposito}; border-radius: 6px; font-size: 14px; }
 </style>
 </head>
@@ -63,6 +67,19 @@ export function construirHtmlMapa(
     });
   }
 
+  function contenido(p){
+  var caja = document.createElement("div");
+  caja.innerHTML = "<strong>" + esc(p.titulo) + "</strong><br>" + esc(p.detalle) + "<br>";
+  var boton = document.createElement("button");
+  boton.className = "confirmar";
+  boton.textContent = "Confirmar entrega";
+  boton.onclick = function () {
+  window.ReactNativeWebView.postMessage(JSON.stringify({tipo: "confirmar", id: p.id}));
+  };
+  caja.appendChild(boton);
+  return caja;
+  }
+
   var mapa = L.map("mapa");
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
@@ -84,7 +101,7 @@ export function construirHtmlMapa(
     limites.extend([p.lat, p.lng]);
     L.marker([p.lat, p.lng], { icon: icono("parada", p.numero) })
       .addTo(mapa)
-      .bindPopup("<strong>" + esc(p.titulo) + "</strong><br>" + esc(p.detalle));
+      .bindPopup(contenido(p));
   });
 
   var yo = null;

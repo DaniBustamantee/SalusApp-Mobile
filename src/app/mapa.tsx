@@ -8,10 +8,11 @@ import { formatearRuta } from "@/utils/formatearRuta";
 import { Ionicons } from "@expo/vector-icons";
 import { useQuery } from "@tanstack/react-query";
 import * as Location from "expo-location";
+import { useRouter } from "expo-router";
 import { useMemo, useRef, useState } from "react";
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { WebView } from "react-native-webview";
+import { WebView, type WebViewMessageEvent } from "react-native-webview";
 import { DefaultTheme, useTheme } from "styled-components/native";
 
 
@@ -19,6 +20,7 @@ export default function Mapa() {
   const theme = useTheme();
   const styles = useMemo(() => crearEstilos(theme), [theme]);
   const { envios, isLoading, error, refetch } = useTodosLosPendientes();
+  const router = useRouter();
   const webViewRef = useRef<WebView>(null);
   const [ubicando, setUbicando] = useState(false);
   const [errorUbicacion, setErrorUbicacion] = useState("");
@@ -48,6 +50,18 @@ export default function Mapa() {
     ),
     [ruta, paradas, theme]
   );
+
+
+  function alRecibirMensaje(evento: WebViewMessageEvent) {
+    try {
+      const mensaje = JSON.parse(evento.nativeEvent.data);
+      if (mensaje.tipo === "confirmar" && paradas.some((parada) => parada.id ===
+        mensaje.id)) {
+        router.push({ pathname: "/confirmar", params: { id: mensaje.id } });
+      }
+    } catch { }
+  }
+
 
   async function irAMiUbicacion() {
     setErrorUbicacion("");
@@ -107,7 +121,7 @@ export default function Mapa() {
       )}
       {errorUbicacion !== "" && <Text style={styles.avisoError}>{errorUbicacion}</Text>}
       <View style={styles.zonaMapa}>
-        <WebView ref={webViewRef} source={{ html, baseUrl: "https://salusapp.local" }} style={styles.mapa} />
+        <WebView ref={webViewRef} source={{ html, baseUrl: "https://salusapp.local" }} style={styles.mapa} onMessage={alRecibirMensaje} />
         <Pressable style={styles.botonUbicacion} onPress={irAMiUbicacion} disabled={ubicando}>
           {ubicando
             ? <ActivityIndicator color={theme.colors.surface} />

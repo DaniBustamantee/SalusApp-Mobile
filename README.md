@@ -23,7 +23,7 @@ El grupo está compuesto por 3 integrantes, por lo que se definieron las 4 Featu
 1. **Consultar pedidos asignados**: pestaña "Pendientes" de la pantalla "Mis envíos". Muestra los envíos pendientes del repartidor con datos reales del backend, con un icono y un color según el estado. Al tocar una tarjeta se abre la confirmación de la entrega. Las listas se cargan por páginas de a 10 y piden la siguiente al llegar al final.
 2. **Consultar el historial de entregas**: pestaña "Historial" de la misma pantalla. Muestra las entregas ya confirmadas con su resultado real (completo, parcial o fallido). Las listas se cargan por páginas de a 10 y piden la siguiente al llegar al final.
 3. **Confirmar el resultado de una entrega**: se elige el resultado, se agregan observaciones y se envía al backend. Al volver, las listas se actualizan solas.
-4. **Mapa de entrega**: muestra los envíos pendientes como paradas numeradas sobre un mapa (OpenStreetMap con Leaflet, dentro de un `WebView`), el depósito como punto de partida y, con un botón, la **posición actual del repartidor** obtenida con el GPS. Avisa cuántos envíos no se pudieron ubicar. Calcula el **orden sugerido de las paradas** y dibuja la **ruta por las calles** con la distancia y el tiempo estimados. Si el cálculo falla, el mapa se muestra igual, con un aviso.
+4. **Mapa de entrega**: muestra los envíos pendientes como paradas numeradas sobre un mapa (OpenStreetMap con Leaflet, dentro de un `WebView`), el depósito como punto de partida y, con un botón, la **posición actual del repartidor** obtenida con el GPS. Avisa cuántos envíos no se pudieron ubicar. Calcula el **orden sugerido de las paradas** y dibuja la **ruta por las calles** con la distancia y el tiempo estimados. Si el cálculo falla, el mapa se muestra igual, con un aviso. Al tocar una parada se abre un globo con los datos del envío y un botón **"Confirmar entrega"**, que lleva a la pantalla de confirmación.
 
 Además de las features de la consigna, se implementó:
 
@@ -36,7 +36,7 @@ Además de las features de la consigna, se implementó:
 
 ## Features pendientes
 
-- **Confirmar una entrega desde el mapa**, tocando una parada.
+
 - **Tests** con Jest y React Native Testing Library.
 
 ## Avance en la materia
@@ -53,6 +53,7 @@ Además de las features de la consigna, se implementó:
 - **TypeScript**: tipos propios (`Envio`).
 - **Hook propio** (`useEnvios`).
 - **APIs nativas**: GPS con `expo-location`, incluido el pedido de permisos.
+- **Comunicación entre la app y el WebView**: la página del mapa le avisa a la app con `postMessage` y la app lo recibe en `onMessage`, validando el mensaje antes de navegar con `router.push`.
 - **Íconos** con `@expo/vector-icons`.
 - **Componentes reutilizables** (`MenuButton`, `PedidoCard`, `MensajeError`) y comunicación mediante `props`.
 
@@ -143,5 +144,5 @@ Con el emulador de Android encendido, presionar `a` en la terminal de Expo.
 
 ## Desarrollo incremental
 
-Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial, confirmación de entregas y un mapa con las paradas, la ruta sugerida y la posición del repartidor, con navegación por pestañas, estado de sesión y tema centralizado. Quedan pendientes la confirmación de entregas desde el mapa y los tests, que se incorporarán en las próximas etapas.
+Esta entrega conecta la app al backend real del sistema: login, pedidos pendientes, historial, confirmación de entregas y un mapa con las paradas, la ruta sugerida y la posición del repartidor, con navegación por pestañas, estado de sesión y tema centralizado. Queda pendiente la incorporación de tests, que se hará en las próximas etapas.
 
